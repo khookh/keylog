@@ -17,17 +17,19 @@ class Session(Thread):
             if self.serverKill:
                 return
             try:
-                msg = self.socket.recv(1024).recode("latin1")
-                msg = msg[:-2].split(" ")
-                self.parse(msg)
+                msg = self.socket.recv(1024).decode("latin1")
                 print("Message received: {}".format(msg))
+                msg = msg.split("\n")
+                print(msg)
+                for message in msg:
+                    self.__parse(message.split(" "))
             except UnicodeDecodeError:
                 print("UNICODE DECODE ERROR")
 
     def __writetext(self):
-        file = open(self.dateName, "w")
+        file = open(self.dateName+".txt", "w")
         for line in self.lines:
-            file.write(line)
+            file.write(line[0]+"\n")
         file.close()
 
     def __parse(self, msg):
@@ -39,14 +41,18 @@ class Session(Thread):
                 self.socket.close()
         else:
             self.countDown = 0
-        if msg[0] is "SEND":
+        if msg[0] == "SEND":
+            print("Send signal")
             self.lines.append(msg[1:])
-        elif msg[0] is "STOCK":
+        elif msg[0] == "STOCK":
+            print("Stock signal")
             self.__writetext()
             print("Wrote text tile: {}".format(self.dateName))
             self.lines.clear()
             self.dateName = ""
-        elif msg[0] is "DESC":
+            self.socket.close()
+        elif msg[0] == "DESC":
+            print("Desc signal")
             self.dateName = "".join(msg[1:])
 
 
