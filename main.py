@@ -50,10 +50,12 @@ class Session(Thread):
             print("Wrote text tile: {}".format(self.dateName))
             self.lines.clear()
             self.dateName = ""
-            self.socket.close()
         elif msg[0] == "DESC":
             print("Desc signal")
             self.dateName = "".join(msg[1:])
+        elif msg[0] == "END":
+            print("End signal")
+            self.socket.close()
 
 
 def run():
