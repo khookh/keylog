@@ -27,7 +27,7 @@ class Session(Thread):
                 print("UNICODE DECODE ERROR")
 
     def __writetext(self):
-        file = open(self.dateName+".txt", "w")
+        file = open("output/"+self.dateName+".txt", "w")
         for line in self.lines:
             file.write(line[0]+"\n")
         file.close()

